@@ -17,7 +17,7 @@ class CreatePhonesTable extends Migration
             $table->id();
             $table->string('brand');
             $table->string('model');
-            $table->string('imageScr');
+            $table->string('imageSrc');
             $table->json('specs');
             $table->decimal('postpaidcost',7,2);
             $table->decimal('prepaidcost',7,2);
