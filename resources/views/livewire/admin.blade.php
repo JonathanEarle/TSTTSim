@@ -20,7 +20,7 @@
           <td>Specs</td>
           <td>Prepaid</td>
           <td>Postpaid</td>
-          <td colspan = 2>Actions</td>
+          <td colspan=2>Actions</td>
         </tr>
     </thead>
     <tbody>

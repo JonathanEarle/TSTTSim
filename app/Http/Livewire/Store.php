@@ -3,15 +3,18 @@
 namespace App\Http\Livewire;
 
 use Illuminate\Support\Facades\Auth;
-use Request;
 
 use Livewire\Component;
 use App\Models\Phone;
 use App\Models\Order;
+use App\Models\User;
 
 class Store extends Component
 {
-    public $user_id, $phone_id, $plan, $cost, $phones,$orders,$show;
+    public $user_id, $phone_id, $plan, $cost, $phones;
+    public $email,$address,$phone_no,$brand,$model;
+    public $user, $phone;
+    public $isOpen=0;
 
     public function render()
     {
@@ -19,23 +22,50 @@ class Store extends Component
         return view('livewire.store');
     }
 
-    private function calculateCost($phone_id,$plan)
+    public function order(Phone $phone)
     {
-        return $plan ? Phone::select('postpaidcost')->where('id', $phone_id)->first()['postpaidcost'] : 
-            Phone::select('prepaidcost')->where('id', $phone_id)->first()['prepaidcost'];
+        $this->getOrderData($phone);
+        $this->openModal();
     }
 
-    public function order($phone_id,$plan)
+    public function openModal()
     {
-        $this->orders = Order::all();
+        $this->isOpen = true;
+    }
+  
+    public function closeModal()
+    {
+        $this->isOpen = false;
+    }
+
+    private function getOrderData(Phone $phone)
+    {
         if (!Auth::check())
             return session()->flash('message','Must be logged in to purchase.'); 
         
-        $this->user_id=Auth::id();
+        $this->user=Auth::user();
 
-        $this->phone_id=$phone_id;
-        $this->plan=$plan;
-        $this->cost=$this->calculateCost($this->phone_id, $this->plan);
+        $this->user_id=$this->user->id;
+        $this->email=$this->user->email;
+        $this->address=$this->user->address;
+        $this->phone_no=$this->user->phone_no;
+
+        $this->phone=$phone;        
+        $this->phone_id=$this->phone->id;
+        $this->brand=$this->phone->brand;
+        $this->model=$this->phone->model;
+
+        $this->cost=$this->phone->prepaidcost; //Default plan is prepaid
+    }
+
+    private function getPlan(Phone $phone,$cost)
+    {
+        return $phone->prepaidcost==$cost ? 0 : 1; //0-prepaid, 1-postpaid
+    }
+
+    public function purchase()
+    {
+        $this->plan=$this->getPlan($this->phone,$this->cost);
 
         $this->validate([
             'user_id'=>'required',
@@ -44,7 +74,6 @@ class Store extends Component
             'cost'=>'required'
         ]);
 
-        $this->show=true;
         $newOrder = Order::create([
             'user_id'=>$this->user_id,
             'phone_id'=>$this->phone_id,
@@ -54,5 +83,7 @@ class Store extends Component
         $newOrder->save();
 
         session()->flash('message','Order Made');
+        
+        $this->closeModal();
     }
 }
