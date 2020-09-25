@@ -7,7 +7,7 @@ use App\Models\Phone;
 
 class Admin extends Component
 {
-    public $phone_id, $brand, $model, $imageScr, $specs, $prepaidcost, $postpaidcost;
+    public $phone_id, $brand, $model, $imageSrc, $specs, $prepaidcost, $postpaidcost;
     public $phones;
     public $isOpen = 0;
 
@@ -36,7 +36,7 @@ class Admin extends Component
     private function resetFields(){
         $this->brand='';
         $this->model='';
-        $this->imageScr='';
+        $this->imageSrc='';
         $this->specs='';
         $this->prepaidcost='';
         $this->postpaidcost='';
@@ -47,14 +47,14 @@ class Admin extends Component
         $this->validate([
             'brand'=>'required',
             'model'=>'required',
-            'imageScr'=>'required',
+            'imageSrc'=>'required',
             'specs'=>'required',
         ]);
 
         Phone::updateOrCreate(['id' => $this->phone_id],[
             'brand'=>$this->brand,
             'model'=>$this->model,
-            'imageScr'=>$this->imageScr,
+            'imageSrc'=>$this->imageSrc,
             'specs'=>json_encode($this->specs),
             'prepaidcost'=>$this->prepaidcost,
             'postpaidcost'=>$this->postpaidcost
@@ -72,7 +72,7 @@ class Admin extends Component
         $this->phone_id = $id;
         $this->brand=$phone->brand;
         $this->model=$phone->model;
-        $this->imageScr=$phone->imageScr;
+        $this->imageSrc=$phone->imageSrc;
         $this->specs=$phone->specs;
         $this->prepaidcost=$phone->prepaidcost;
         $this->postpaidcost=$phone->postpaidcost;

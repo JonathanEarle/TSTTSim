@@ -18,7 +18,7 @@ class Phone extends Model
     protected $fillable = [
         'brand',
         'model',
-        'imageScr',
+        'imageSrc',
         'specs',
         'prepaidcost',
         'postpaidcost',

@@ -30,8 +30,8 @@
           </div>
 
           <div class="form-group">
-              <label for="imageScr">Image:</label>
-              <input type="text" class="form-control" wire:model="imageScr" name="imageScr"/>
+              <label for="imageSrc">Image:</label>
+              <input type="text" class="form-control" wire:model="imageSrc" name="imageSrc"/>
           </div>
           <div class="form-group">
               <label for="specs">Specifications:</label>

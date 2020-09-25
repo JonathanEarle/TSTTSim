@@ -1,17 +1,18 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Catalouge
+        Shop
     </h2>
 </x-slot>
 
 <div class="row">
 <div class="col-sm-12">
-    <button wire:click="create()" type="button" class="btn btn-primary-outline">Add Phone</button>
-    @if($isOpen)
-        @include('livewire.create')
-    @endif
     <h1 class="display-3">Phones</h1>    
   <table class="table table-striped">
+    @if($show)
+        @foreach($orders as $order)
+            <p>{{ $order }}</p>
+        @endforeach
+    @endif
     <thead>
         <tr>
           <td>Brand</td>
@@ -32,10 +33,14 @@
             <td>{{$phone->prepaidcost}}</td>
             <td>{{$phone->postpaidcost}}</td>
             <td>
-                <button wire:click="edit({{ $phone->id }})" type="button" class="btn btn-primary-outline">Add Phone</button>
+                <label for="plan{{ $phone->id }}">Choose a payment type:</label>
+                <select id="plan{{ $phone->id }}" name="plan{{ $phone->id }}" wire:model="plan">
+                    <option value=0>Prepaid</option>
+                    <option value=1>Postpaid</option>
+                </select>          
             </td>
             <td>
-                <button wire:click="delete({{ $phone->id }})" type="button" class="btn btn-primary-outline">Add Phone</button>
+                <button wire:click.prevent="order({{ $phone->id }}, {{ $plan }})" type="button" class="btn btn-primary-outline">Order</button>
             </td>
         </tr>
         @endforeach

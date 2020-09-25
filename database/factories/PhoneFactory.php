@@ -25,7 +25,7 @@ class PhoneFactory extends Factory
         return [
             'brand' => $this->faker->company,
             'model' => $this->faker->lastName,
-            'imageScr' => $this->faker->imageUrl($width = 640, $height = 480),
+            'imageSrc' => $this->faker->imageUrl($width = 640, $height = 480),
             'specs' => json_encode(["CameraQuality"=>"64 MP", "Memory"=>"64 GB RAM", "Resolution"=>"1080x2400", "Network"=>"GSM/HSPA/LTE", "OS"=>"Android 10"]),
             'prepaidcost' => $this->faker->randomNumber(2),
             'postpaidcost' => $this->faker->randomNumber(2),
