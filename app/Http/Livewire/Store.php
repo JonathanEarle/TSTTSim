@@ -11,34 +11,78 @@ use App\Models\User;
 
 class Store extends Component
 {
-    public $user_id, $phone_id, $plan, $cost, $phones;
+    public $user_id, $phone_id, $plan, $cost;
     public $email,$address,$phone_no,$brand,$model;
-    public $user, $phone;
+    public  $phones;
+
+    /**
+     * The currently authenticated user
+     *
+     * @var User
+     */
+    public $user;
+
+    /**
+     * Phone selected for purcahsing
+     *
+     * @var Phone
+     */
+    public $phone;
+    
+    /**
+     * Controls opening and closing of form to add a new phone
+     *
+     * @var boolean
+     */
     public $isOpen=0;
 
+    
+    /**
+     * Renders the admin view
+     *
+     * @return View
+     */
     public function render()
     {
         $this->phones = Phone::all();
-        return view('store');
+        return view('livewire.store');
     }
 
+    /**
+     * Sets the order information and opens the form view
+     *
+     * @param Phone $phone The phone selected by the user for purchasing
+     */
     public function order(Phone $phone)
     {
-        $this->getOrderData($phone);
-        $this->openModal();
+        $this->setOrderInfo($phone);
+        $this->openForm();
     }
 
-    public function openModal()
+    /**
+     * Opens the form view using a blade if directive in  store blade file
+     *
+     */
+    public function openForm()
     {
         $this->isOpen = true;
     }
   
-    public function closeModal()
+    /**
+     * Close the form view using a blade if directive in  store blade file
+     *
+     */
+    public function closeForm()
     {
         $this->isOpen = false;
     }
 
-    private function getOrderData(Phone $phone)
+    /**
+     * Retrieves the authenticated user and sets theirs and the phone's information needed for the order
+     *
+     * @param Phone $phone The phone selected by the user for purchasing
+     */
+    private function setOrderInfo(Phone $phone)
     {
         if (!Auth::check())
             return session()->flash('message','Must be logged in to purchase.'); 
@@ -58,11 +102,26 @@ class Store extends Component
         $this->cost=$this->phone->prepaidcost; //Default plan is prepaid
     }
 
-    private function getPlan(Phone $phone,$cost)
+    /**
+     * Determines if the plan for the new phone is prepaid or postpaid
+     * 
+     * The determination is based on whether the cost set is the prepaid cost
+     * if not then it must be the postpaid cost, the value selection is ridgid.
+     *
+     * @param Phone $phone The phone selected by the user for purchasing
+     * @param float $cost Cost of the plan selected by the user
+     * 
+     * @return boolean The plan choosen by the customer (Fasle-prepaid, True-postpaid)
+     */
+    private function getPlan(Phone $phone, $cost)
     {
-        return $phone->prepaidcost==$cost ? 0 : 1; //0-prepaid, 1-postpaid
+        return $phone->prepaidcost==$cost ? false : true;
     }
 
+    /**
+     * Stores the phone order in the database and closes the form
+     *
+     */
     public function store()
     {
         $this->plan=$this->getPlan($this->phone,$this->cost);
@@ -70,8 +129,8 @@ class Store extends Component
         $this->validate([
             'user_id'=>'required',
             'phone_id'=>'required',
-            'plan'=>'required',
-            'cost'=>'required'
+            'plan'=>'required|boolean',
+            'cost'=>'required|numeric'
         ]);
 
         $newOrder = Order::create([
@@ -84,6 +143,6 @@ class Store extends Component
 
         session()->flash('message','Order Made');
         
-        $this->closeModal();
+        $this->closeForm();
     }
 }

@@ -9,12 +9,22 @@ class Phone extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
         'prepaidcost' => 'float',
         'postpaidcost' => 'float',
         'specs' => 'array'
     ];
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'brand',
         'model',

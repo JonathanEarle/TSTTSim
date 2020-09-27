@@ -9,30 +9,57 @@ class Admin extends Component
 {
     public $phone_id, $brand, $model, $imageSrc, $specs, $prepaidcost, $postpaidcost;
     public $phones;
-    public $isOpen = 0;
 
+    /**
+     * Controls opening and closing of form to add a new phone
+     *
+     * @var boolean
+     */
+    public $isOpen=false;
+
+    /**
+     * Renders the admin view
+     *
+     * @return View
+     */
     public function render()
     {
         $this->phones = Phone::all();
         return view('livewire.admin');
     }
 
+    /**
+     * Resets the phone form fields and opens the form view
+     *
+     */
     public function create()
     {
         $this->resetFields();
-        $this->openModal();
+        $this->openForm();
     }
 
-    public function openModal()
+    /**
+     * Opens the form view using a blade if directive in  store blade file
+     *
+     */
+    public function openForm()
     {
         $this->isOpen = true;
     }
   
-    public function closeModal()
+    /**
+     * Close the form view using a blade if directive in  store blade file
+     *
+     */
+    public function closeForm()
     {
         $this->isOpen = false;
     }
 
+    /**
+     * Resets the phone form fields
+     *
+     */
     private function resetFields(){
         $this->brand='';
         $this->model='';
@@ -42,13 +69,21 @@ class Admin extends Component
         $this->postpaidcost='';
     }
 
+    /**
+     * Stores the newly added phone or updates an existing one in the database, resests the fields
+     * and closes the form
+     *
+     */
     public function store()
     {
+        
         $this->validate([
             'brand'=>'required',
             'model'=>'required',
             'imageSrc'=>'required',
-            'specs'=>'required',
+            'specs'=>'required|json',
+            'prepaidcost'=>'required|numeric',
+            'postpaidcost'=>'required|numeric',
         ]);
 
         Phone::updateOrCreate(['id' => $this->phone_id],[
@@ -62,14 +97,19 @@ class Admin extends Component
         session()->flash('message',
         $this->phone_id ? 'Phone Updated':'Phone Added');
 
-        $this->closeModal();
+        $this->closeForm();
         $this->resetFields();
     }
 
-    public function edit($id)
+    /**
+     * Sets the field values to the ones of th phone to be edited
+     *
+     * @param int $phone_id Id of the phone being edited
+     */
+    public function edit($phone_id)
     {
-        $phone = Phone::findOrFail($id);
-        $this->phone_id = $id;
+        $phone = Phone::findOrFail($phone_id);
+        $this->phone_id = $phone_id;
         $this->brand=$phone->brand;
         $this->model=$phone->model;
         $this->imageSrc=$phone->imageSrc;
@@ -77,12 +117,17 @@ class Admin extends Component
         $this->prepaidcost=$phone->prepaidcost;
         $this->postpaidcost=$phone->postpaidcost;
     
-        $this->openModal();
+        $this->openForm();
     }
 
-    public function delete($id)
+    /**
+     * Deletes the selected phone
+     *
+     * @param int $phone_id Id of the phone being edited
+     */
+    public function delete($phone_id)
     {
-        Phone::find($id)->delete();
+        Phone::find($phone_id)->delete();
         session()->flash('message', 'Phone Removed');
     }
 }
