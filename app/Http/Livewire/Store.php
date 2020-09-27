@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use Livewire\Component;
 use App\Models\Phone;
@@ -11,6 +12,8 @@ use App\Models\User;
 
 class Store extends Component
 {
+    use AuthorizesRequests;
+
     public $user_id, $phone_id, $plan, $cost;
     public $email,$address,$phone_no,$brand,$model;
     public  $phones;
@@ -115,7 +118,7 @@ class Store extends Component
      */
     private function getPlan(Phone $phone, $cost)
     {
-        return $phone->prepaidcost==$cost ? false : true;
+        return $phone->prepaidcost==$cost;
     }
 
     /**
@@ -124,6 +127,8 @@ class Store extends Component
      */
     public function store()
     {
+        $this->authorize('create');
+        
         $this->plan=$this->getPlan($this->phone,$this->cost);
 
         $this->validate([

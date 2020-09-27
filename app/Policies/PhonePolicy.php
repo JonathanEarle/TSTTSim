@@ -11,84 +11,62 @@ class PhonePolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
+     * Determines if the user is authorized for all actions.
      *
      * @param  \App\Models\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function before($user, $ability)
     {
-        //
+        if($user->isAdmin()) {
+            return true;
+        }
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can view Phones.
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Phone  $phone
      * @return mixed
      */
-    public function view(User $user, Phone $phone)
+    public function view(?User $user, Phone $phone)
     {
-        //
+        return true;
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can create any Phones.
      *
      * @param  \App\Models\User  $user
      * @return mixed
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can update any Phone.
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Phone  $phone
      * @return mixed
      */
-    public function update(User $user, Phone $phone)
+    public function update(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determine whether the user can delete any Phone.
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Phone  $phone
      * @return mixed
      */
-    public function delete(User $user, Phone $phone)
+    public function delete(User $user)
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Phone  $phone
-     * @return mixed
-     */
-    public function restore(User $user, Phone $phone)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Phone  $phone
-     * @return mixed
-     */
-    public function forceDelete(User $user, Phone $phone)
-    {
-        //
+        return $user->isAdmin();
     }
 }

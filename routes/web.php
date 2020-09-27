@@ -19,9 +19,10 @@ use App\Http\Livewire\Store;
 Route::match(['get','post'],'/', Store::class);
 Route::match(['get','post'],'store',Store::class);
 
-Route::middleware(['auth:sanctum', 'verified'])->any('admin',Admin::class);
+Route::middleware(['auth:sanctum', 'verified'])->group(function(){
+    Route::any('admin',Admin::class)->middleware('can:create,App\Models\Phone');
 
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});

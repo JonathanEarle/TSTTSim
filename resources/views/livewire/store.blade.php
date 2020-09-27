@@ -8,7 +8,12 @@
     <div class="col-sm-12">
         <h1 class="display-3">Phones</h1>   
         @if($isOpen)
-            @include('livewire.order')
+            @can('create', App\Models\Order::class)
+                @include('livewire.order')
+            @endcan
+            @cannot('create', App\Models\Order::class)
+                @include('auth.login')
+            @endcannot
         @endif 
         <table class="table table-striped">
             <thead>

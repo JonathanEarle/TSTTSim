@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use App\Models\Phone;
 
 class Admin extends Component
 {
+    use AuthorizesRequests;
+    
     public $phone_id, $brand, $model, $imageSrc, $specs, $prepaidcost, $postpaidcost;
     public $phones;
 
@@ -76,6 +79,7 @@ class Admin extends Component
      */
     public function store()
     {
+        $this->authorize('create');
         
         $this->validate([
             'brand'=>'required',
@@ -108,6 +112,8 @@ class Admin extends Component
      */
     public function edit($phone_id)
     {
+        $this->authorize('update');
+
         $phone = Phone::findOrFail($phone_id);
         $this->phone_id = $phone_id;
         $this->brand=$phone->brand;
@@ -127,6 +133,7 @@ class Admin extends Component
      */
     public function delete($phone_id)
     {
+        $this->authorize('delete');
         Phone::find($phone_id)->delete();
         session()->flash('message', 'Phone Removed');
     }
