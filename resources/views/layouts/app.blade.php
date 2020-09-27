@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'TSTT') }}</title>
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
@@ -20,7 +20,18 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-dropdown')
+            @if (Route::has('login'))
+                @auth
+                    @livewire('navigation-dropdown')
+                @else
+                    <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                        <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Login</a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
+                        @endif
+                    </div>
+                @endif
+            @endif
 
             <!-- Page Heading -->
             <header class="bg-white shadow">

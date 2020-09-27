@@ -32,10 +32,10 @@
             <td>{{$phone->prepaidcost}}</td>
             <td>{{$phone->postpaidcost}}</td>
             <td>
-                <button wire:click="edit({{ $phone->id }})" type="button" class="btn btn-primary-outline">Add Phone</button>
+                <button wire:click="edit({{ $phone->id }})" type="button" class="btn btn-primary-outline">Edit</button>
             </td>
             <td>
-                <button wire:click="delete({{ $phone->id }})" type="button" class="btn btn-primary-outline">Add Phone</button>
+                <button wire:click="delete({{ $phone->id }})" type="button" class="btn btn-primary-outline">Delete</button>
             </td>
         </tr>
         @endforeach

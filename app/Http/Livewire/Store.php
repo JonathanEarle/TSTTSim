@@ -19,7 +19,7 @@ class Store extends Component
     public function render()
     {
         $this->phones = Phone::all();
-        return view('livewire.store');
+        return view('store');
     }
 
     public function order(Phone $phone)
@@ -63,7 +63,7 @@ class Store extends Component
         return $phone->prepaidcost==$cost ? 0 : 1; //0-prepaid, 1-postpaid
     }
 
-    public function purchase()
+    public function store()
     {
         $this->plan=$this->getPlan($this->phone,$this->cost);
 
