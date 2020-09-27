@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Livewire\Admin;
 use App\Http\Livewire\Store;
+use App\Http\Livewire\PhonePage;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +17,13 @@ use App\Http\Livewire\Store;
 |
 */
 
-Route::match(['get','post'],'/', Store::class);
-Route::match(['get','post'],'store',Store::class);
+Route::redirect('/', '/store');
+
+Route::prefix('store')->group(function(){    
+    Route::get('/',Store::class);
+    Route::any('phones/{phone_id}',PhonePage::class);
+});
+
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::any('admin',Admin::class)->middleware('can:create,App\Models\Phone');

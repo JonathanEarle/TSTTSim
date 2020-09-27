@@ -7,28 +7,37 @@
 <div class="row">
     <div class="col-sm-12">
         <h1 class="display-3">Phones</h1>   
+        @if($isOpen)
+            @can('create', App\Models\Order::class)
+                @include('livewire.order')
+            @endcan
+            @cannot('create', App\Models\Order::class)
+                @include('auth.login')
+            @endcannot
+        @endif 
         <table class="table table-striped">
             <thead>
                 <tr>
-                <td>Name</td>
+                <td>Brand</td>
+                <td>Model</td>
                 <td>Image</td>
+                <td>Specs</td>
                 <td>Prepaid</td>
                 <td>Postpaid</td>
                 <td colspan = 2>Actions</td>
                 </tr>
             </thead>
             <tbody>
-                @foreach($phones as $phone)
                 <tr>
                     <td>{{$phone->brand}} {{$phone->model}}</td>
                     <td>{{$phone->imageSrc}}</td>
+                    <td>{{$phone->specs}}</td>
                     <td>{{$phone->prepaidcost}}</td>
                     <td>{{$phone->postpaidcost}}</td>
                     <td>
-                        <button wire:click="viewPhone({{ $phone->id }})" type="button" class="btn btn-primary-outline">Details</button>
+                        <button wire:click.prevent="order({{ $phone }})" type="button" class="btn btn-primary-outline">Order</button>
                     </td>
                 </tr>
-                @endforeach
             </tbody>
         </table>
     <div>
