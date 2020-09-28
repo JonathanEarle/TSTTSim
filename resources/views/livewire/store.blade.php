@@ -21,7 +21,7 @@
                 @foreach($phones as $phone)
                 <tr>
                     <td>{{$phone->brand}} {{$phone->model}}</td>
-                    <td>{{$phone->imageSrc}}</td>
+                    <td><img height='300' width='300' src='/storage/images/phones/{{$phone->imageSrc}}'></img></td>
                     <td>{{$phone->prepaidcost}}</td>
                     <td>{{$phone->postpaidcost}}</td>
                     <td>

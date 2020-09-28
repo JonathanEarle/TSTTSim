@@ -9,6 +9,19 @@ class Phone extends Model
 {
     use HasFactory;
 
+    public function setSpecsAttribute($value)
+    {
+        $specs = [];
+
+        foreach ($value as $array_item) {
+            if (!is_null($array_item['spec'])) {
+                $specs[] = $array_item;
+            }
+        }
+
+        $this->attributes['specs'] = json_encode($specs);
+    }
+
     /**
      * The attributes that should be cast to native types.
      *

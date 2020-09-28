@@ -124,7 +124,7 @@ class PhonePage extends Component
      */
     public function store()
     {
-        $this->authorize('create');
+        $this->authorize('create',Order::class);
         
         $this->plan=$this->getPlan($this->phone,$this->cost);
 
@@ -148,6 +148,12 @@ class PhonePage extends Component
         $this->closeForm();
     }
 
+    /**
+     * Recieves the phone id passed through the URI
+     *
+     * @param int $phone_id The id of the phone selected by the user
+     * 
+     */
     public function mount($phone_id)
     {
         $this->phone=Phone::find($phone_id);

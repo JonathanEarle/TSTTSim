@@ -8,12 +8,11 @@
     <div class="col-sm-12">
         <h1 class="display-3">Phones</h1>   
         @if($isOpen)
-            @can('create', App\Models\Order::class)
+            @auth
                 @include('livewire.order')
-            @endcan
-            @cannot('create', App\Models\Order::class)
+            @else
                 @include('auth.login')
-            @endcannot
+            @endif
         @endif 
         <table class="table table-striped">
             <thead>
@@ -30,8 +29,16 @@
             <tbody>
                 <tr>
                     <td>{{$phone->brand}} {{$phone->model}}</td>
-                    <td>{{$phone->imageSrc}}</td>
-                    <td>{{$phone->specs}}</td>
+                    <td><img height='300' width='300' src='/storage/images/phones/{{$phone->imageSrc}}'></img></td>
+                    <td>
+                        <tr><td>Specifications</td><td>Details</td></tr>
+                        @foreach($phone->specs as $spec)
+                            <tr>
+                                <td>{{$spec['spec']}}:</td>
+                                <td>{{$spec['value']}}:</td>
+                            </tr>
+                        @endforeach
+                    </td>
                     <td>{{$phone->prepaidcost}}</td>
                     <td>{{$phone->postpaidcost}}</td>
                     <td>

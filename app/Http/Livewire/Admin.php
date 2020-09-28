@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Livewire\WithFileUploads;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use App\Models\Phone;
@@ -9,9 +10,24 @@ use App\Models\Phone;
 class Admin extends Component
 {
     use AuthorizesRequests;
+    use WithFileUploads;
     
-    public $phone_id, $brand, $model, $imageSrc, $specs, $prepaidcost, $postpaidcost;
+    public $phone_id, $brand, $model, $imageSrc, $prepaidcost, $postpaidcost;
     public $phones;
+
+    /**
+     * Stores the specifictions of the phone
+     *
+     * @var array
+     */
+    public $specs=array();
+
+    /**
+     * Uploaded image of a phone
+     *
+     * @var Image
+     */
+    public $image;
 
     /**
      * Controls opening and closing of form to add a new phone
@@ -79,13 +95,15 @@ class Admin extends Component
      */
     public function store()
     {
-        $this->authorize('create');
+        $this->authorize('create',Phone::class);
+
+        $this->imageSrc=$this->uploadImage();
         
         $this->validate([
             'brand'=>'required',
             'model'=>'required',
             'imageSrc'=>'required',
-            'specs'=>'required|json',
+            'specs'=>'required',
             'prepaidcost'=>'required|numeric',
             'postpaidcost'=>'required|numeric',
         ]);
@@ -94,7 +112,7 @@ class Admin extends Component
             'brand'=>$this->brand,
             'model'=>$this->model,
             'imageSrc'=>$this->imageSrc,
-            'specs'=>json_encode($this->specs),
+            'specs'=>$this->specs,
             'prepaidcost'=>$this->prepaidcost,
             'postpaidcost'=>$this->postpaidcost
         ]);
@@ -112,9 +130,9 @@ class Admin extends Component
      */
     public function edit($phone_id)
     {
-        $this->authorize('update');
-
         $phone = Phone::findOrFail($phone_id);
+        $this->authorize('update',phone);
+
         $this->phone_id = $phone_id;
         $this->brand=$phone->brand;
         $this->model=$phone->model;
@@ -133,8 +151,24 @@ class Admin extends Component
      */
     public function delete($phone_id)
     {
-        $this->authorize('delete');
-        Phone::find($phone_id)->delete();
+        $phone=Phone::find($phone_id);
+        $this->authorize('delete',$phone);
+        $phone->delete();
         session()->flash('message', 'Phone Removed');
+    }
+
+    /**
+     * Upload the new phone image to the server for public viewing
+     *
+     * @return string The name of the stored file
+     */
+    public function uploadImage()
+    {
+        $this->validate([
+            'image' => 'image|max:1024', // 1MB Max
+        ]);
+
+        $this->image->store('images/phones', 'public');
+        return $this->image->hashName();
     }
 }

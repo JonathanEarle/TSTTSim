@@ -15,7 +15,7 @@
               <li>{{ $error }}</li>
             @endforeach
         </ul>
-      </div><br />
+      </div><br/>
     @endif
       <form>
           @csrf
@@ -31,12 +31,30 @@
 
           <div class="form-group">
               <label for="imageSrc">Image:</label>
-              <input type="text" class="form-control" wire:model="imageSrc" name="imageSrc"/>
+              <input type="file" class="form-control" wire:model="image" name="imageSrc"/>
           </div>
+
           <div class="form-group">
-              <label for="specs">Specifications:</label>
-              <input type="text" class="form-control" wire:model="specs" name="specs"/>
+            <label for="specs">Specifications</label>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                    <td>Specification</td>
+                    <td>Details</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for($i=0;$i<= 9;$i++)
+                    <tr>
+                        <td><input type="text" class="form-control" wire:model="specs.{{ $i }}.spec"></td>
+                        <td><input type="text" class="form-control" wire:model="specs.{{ $i }}.value"></td>
+                    </tr>
+                    @endfor
+                </tbody>
+            </table>
           </div>
+
           <div class="form-group">
               <label for="prepaidcost">Prepaid Cost:</label>
               <input type="text" class="form-control" wire:model="prepaidcost" name="prepaidcost"/>

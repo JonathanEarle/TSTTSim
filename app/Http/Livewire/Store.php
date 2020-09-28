@@ -28,6 +28,7 @@ class Store extends Component
     /**
      * Redirects user to selectd phone page
      *
+     * @param int $phone_id Id of the phone selected
      * @return Redirector 
      */
     public function viewPhone($phone_id)

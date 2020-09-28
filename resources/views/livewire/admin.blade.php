@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Catalouge
+        Admin
     </h2>
 </x-slot>
 
@@ -27,10 +27,18 @@
                 @foreach($phones as $phone)
                 <tr>
                     <td>{{$phone->brand}} {{$phone->model}}</td>
-                    <td>{{$phone->imageSrc}}</td>
-                    <td>{{$phone->specs}}</td>
+                    <td><img height='300' width='300' src='/storage/images/phones/{{$phone->imageSrc}}'></img></td>
                     <td>{{$phone->prepaidcost}}</td>
                     <td>{{$phone->postpaidcost}}</td>
+                    <td>
+                        <tr><td>Specifications</td><td>Details</td></tr>
+                        @foreach($phone->specs as $spec)
+                            <tr>
+                                <td>{{$spec['spec']}}:</td>
+                                <td>{{$spec['value']}}:</td>
+                            </tr>
+                        @endforeach
+                    </td>
                     <td>
                         <button wire:click="edit({{ $phone->id }})" type="button" class="btn btn-primary-outline">Edit</button>
                     </td>
