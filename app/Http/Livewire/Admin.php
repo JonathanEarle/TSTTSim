@@ -131,7 +131,7 @@ class Admin extends Component
     public function edit($phone_id)
     {
         $phone = Phone::findOrFail($phone_id);
-        $this->authorize('update',phone);
+        $this->authorize('update',$phone);
 
         $this->phone_id = $phone_id;
         $this->brand=$phone->brand;
