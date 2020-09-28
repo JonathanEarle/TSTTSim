@@ -1,7 +1,5 @@
 <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Store
-    </h2>
 </x-slot>
 
 <body class="antialiased bg-gray-200 font-sans">
