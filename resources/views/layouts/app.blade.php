@@ -33,12 +33,12 @@
                     </div>
                 @endif
             @endif
-
+            
             <!-- Page Heading -->
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <header class="flex-1 min-w-0">
+                <h2 class="text-center text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate">
                     {{ $header }}
-                </div>
+                </h2>
             </header>
 
             <!-- Page Content -->

@@ -19,11 +19,10 @@ use App\Http\Livewire\PhonePage;
 
 Route::redirect('/', '/store');
 
-Route::prefix('store')->group(function(){    
-    Route::get('/',Store::class);
+Route::prefix('/store')->group(function(){    
+    Route::get('/',Store::class)->name('store');
     Route::any('phones/{phone_id}',PhonePage::class);
 });
-
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::any('admin',Admin::class)->middleware('can:create,App\Models\Phone');
