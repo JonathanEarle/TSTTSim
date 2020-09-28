@@ -11,6 +11,7 @@
             </ul>
         </div><br/>
         @endif
+
       <form class="rounded-md shadow-sm">
           @csrf
           <div class="form-group">    
@@ -68,6 +69,7 @@
                     <input wire:model="postpaidcost" id="postpaidcost" class="form-input block w-full pl-7 pr-12 sm:text-sm sm:leading-5" placeholder="0.00">
                 </div>
           </div>
+          <br/>
 
           <div class="mt-5 flex lg:mt-0 lg:ml-4">
             <span class="sm:ml-3 shadow-sm rounded-md">
